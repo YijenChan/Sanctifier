@@ -8,8 +8,7 @@ Sanctifier uses a full ASR transcript for global reasoning and reopens one quest
 
 ## Repository scope
 
-This repository contains the executed system path, label-isolated scoring utilities, path-free example configurations, tests, and the evaluation protocol. It deliberately excludes datasets, model weights, baseline repositories, ASR caches, official labels, per-example predictions, development traces, and intermediate or aggregate experimental results.
-
+This repository contains the executed system path, label-isolated scoring utilities, path-free example configurations, tests, and the evaluation protocol. 
 The filenames `aligned_pipeline_v1.py` and `aligned_pipeline_v2.py` reflect the implementation lineage. The final system uses only their evidence-construction stages together with `aligned_pipeline_v3.py` for evidence-attributed reconciliation; they are retained so the released code matches the executed pipeline.
 
 ## Structure
