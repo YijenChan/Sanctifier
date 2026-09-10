@@ -1,0 +1,30 @@
+# Credentials and local configuration
+.env
+.env.*
+API_KEY*
+*secret*
+
+# Data, labels, caches, and model weights
+data/
+dataset/
+cache/
+runs/
+models/
+checkpoints/
+*labels*.jsonl
+scorer_*.jsonl
+*.parquet
+*.wav
+*.flac
+*.mp3
+*.pt
+*.pth
+*.bin
+*.safetensors
+
+# Generated files
+__pycache__/
+.pytest_cache/
+*.pyc
+outputs/
+figures/generated/

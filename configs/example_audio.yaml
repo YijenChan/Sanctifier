@@ -1,0 +1,26 @@
+seed: 25
+data:
+  cache_dir: <EDIT_ME>/asr_cache
+  index_path: <EDIT_ME>/inference_index.jsonl
+  transcripts_dir: <EDIT_ME>/asr_cache/transcripts
+  dataset_duration_dir: <EDIT_ME>/YODAS2-MCQA/2
+  full_results: <EDIT_ME>/full_inference.jsonl
+  rag_results: <EDIT_ME>/rag_inference.jsonl
+  labels: <EDIT_ME>/scorer_labels.jsonl
+models:
+  vendor_root: <EDIT_ME>/baseline_implementation
+  audio_llm: <EDIT_ME>/Qwen2-Audio-7B-Instruct
+  text_llm: <EDIT_ME>/Qwen2.5-3B-Instruct
+method:
+  sparse_words_per_second: 0.1
+  verification_clip_seconds: 20.0
+  verification_sar_cap: 0.2
+  uncertainty_threshold_grid: [0.0]
+  evidence_margin_grid: [0.0]
+  trigger_policies: [disagreement_or_sparse]
+  verifier_choices_visible: false
+  selection_policy: query
+runtime:
+  output_dir: <EDIT_ME>/outputs/audio
+  local_files_only: true
+  dtype: float16

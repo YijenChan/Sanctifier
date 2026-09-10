@@ -1,0 +1,11 @@
+numpy
+pyarrow
+PyYAML
+scipy
+torch
+transformers
+sentence-transformers
+librosa
+soundfile
+matplotlib
+pytest
