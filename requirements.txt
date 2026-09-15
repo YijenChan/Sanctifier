@@ -1,11 +1,11 @@
-numpy
-pyarrow
-PyYAML
-scipy
-torch
-transformers
-sentence-transformers
-librosa
-soundfile
-matplotlib
-pytest
+# Install a CUDA-compatible PyTorch build separately for GPU inference.
+numpy>=2.0
+pyarrow>=20
+PyYAML>=6.0
+scipy>=1.15
+torch>=2.5
+transformers>=4.53,<4.58
+sentence-transformers>=3.4,<4
+faster-whisper>=1.2,<2
+librosa>=0.10
+soundfile>=0.13

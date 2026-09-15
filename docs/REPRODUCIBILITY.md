@@ -1,17 +1,39 @@
-# Reproducibility and evaluation boundary
+# Reproducibility boundary
 
-The frozen protocol is in `EVALUATION_PROTOCOL.md`. Development decisions and thresholds must be fixed before official test scoring. The final scorer is the only component permitted to read ground-truth labels. Selection, triggering, audio verification, reconciliation, and fallback behavior must remain label-blind.
+## Reported environment
 
-The original environment used Python 3.12.9 and an NVIDIA RTX 3090. Before publication, export exact installed package versions and model revisions; `requirements.txt` currently records dependencies, not a fully pinned environment.
+- Python 3.12.9
+- NVIDIA RTX 3090
+- PyTorch 2.5.1+cu124
+- Transformers 4.57.6 for Qwen2.5
+- Transformers 4.53.2-compatible implementation for Qwen2-Audio
+- Sentence Transformers 3.4.1
+- PyArrow 25.0.1
+- FP16 inference and greedy decoding
 
-Expected private inputs include timestamped ASR caches, transcript-view predictions, locally licensed Qwen model directories, and scorer labels. These are omitted from this package. Example YAML files identify every required path.
+Model revisions and dataset snapshots should be recorded in the local run manifest because their licenses may prevent redistribution. The repository intentionally contains no checkpoint, dataset, ASR cache, label file, prediction file, or development trace.
 
-Recommended pre-release checks:
+## Label isolation
+
+The `score-prior`, `prepare`, `verify`, and `reconcile` stages do not open `data.labels`. Only `evaluate` reads that path. For official evaluation, keep the label file outside all inference directories and run `evaluate` only after every decision file has been frozen.
+
+## Expected private inputs
+
+- timestamped Whisper-large-v3 transcripts;
+- label-free inference index with sample IDs, durations, questions, and audio hashes;
+- greedy full-transcript and retrieved-view outputs from `run_aligned_reader.py`;
+- locally licensed Qwen2.5 and Qwen2-Audio checkpoints;
+- a scorer-only JSONL file containing `sample_id` and `ground_truth`.
+
+Every `<EDIT_ME>` path in `configs/sanctifier.example.yaml` must be replaced. The example configuration contains no machine-specific path.
+
+## Pre-release checks
 
 ```powershell
-rg -n "API_KEY|BEGIN .*PRIVATE KEY|sk-[A-Za-z0-9_-]+|F:\\ICASSP|[A-Z]:\\" .
+rg -n "API_KEY|BEGIN .*PRIVATE KEY|sk-[A-Za-z0-9_-]+|ghp_[A-Za-z0-9]+" .
+rg -n "[A-Z]:\\\\|F:/ICASSP" .
+python -m unittest discover -s tests -v
 git status --short
-pytest -q
 ```
 
-Experimental outputs are not distributed in this repository. When reconstructing the analysis, retain every registered comparison, including failed and non-improving controls, rather than selecting favorable runs.
+The first two searches should report only the search examples in this document or ignore rules, never a credential or private path. See `METHOD_TO_CODE.md` for the consolidation regression check and `EVALUATION_PROTOCOL.md` for the frozen test boundary.

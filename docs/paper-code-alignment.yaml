@@ -1,0 +1,66 @@
+manuscript_method: Sanctifier final methodology, 2026-09-15
+canonical_entrypoint: src/sanctifier.py
+canonical_config: configs/sanctifier.example.yaml
+
+stages:
+  - paper: Eq. 1, full-transcript prior
+    command: score-prior
+    implementation: stage_score_prior
+    output: priors.jsonl
+  - paper: Eq. 3, hard cross-view or sparse-transcript trigger
+    command: prepare
+    implementation: trigger_decision
+    output: prepared.jsonl
+  - paper: Eq. 4, one budget-bounded clip
+    command: prepare
+    implementation: bounded_interval
+    output: prepared.jsonl
+  - paper: Eq. 5, choice-blind acoustic record
+    command: verify
+    implementation: stage_verify
+    output: verifications.jsonl
+  - paper: Eqs. 6-7, evidence-attributed update
+    command: reconcile
+    implementation: stage_reconcile
+    output: decisions.jsonl
+  - paper: paired answer and SAR metrics
+    command: evaluate
+    implementation: stage_evaluate
+    output: evaluation.json
+
+frozen_values:
+  sparse_words_per_second: 0.1
+  verification_clip_seconds: 20.0
+  verification_sar_cap: 0.20
+  retrieved_windows: 3
+  transcript_window_seconds: 60
+  transcript_overlap_seconds: 20
+  verifier_choices_visible: false
+  require_attribution: true
+  bootstrap_resamples: 10000
+  bootstrap_seed: 25
+
+explicitly_not_in_final_method:
+  - Jensen-Shannon trigger score
+  - entropy trigger
+  - uncertainty threshold
+  - acoustic choice-score fusion
+  - evidence-margin threshold
+  - option-token support gate
+
+regression_audit:
+  trigger_interval_sar:
+    matched: 2250
+    checked: 2250
+  parsed_candidate_quote_acceptance:
+    matched: 2250
+    checked: 2250
+  scope: frozen YODAS2-MCQA artifacts used for the paper
+  limitation: not an independent end-to-end checkpoint rerun
+
+accounting_boundary: >-
+  Verification SAR includes only waveform clips sent to the acoustic verifier;
+  the complete-recording ASR pass is excluded.
+attribution_boundary: >-
+  Exact normalized substring matching establishes provenance to the verifier
+  record, not independent truthfulness of that record.

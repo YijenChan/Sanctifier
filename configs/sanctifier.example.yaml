@@ -1,0 +1,40 @@
+# Canonical paper configuration. Replace every <EDIT_ME> path.
+seed: 25
+
+data:
+  cache_dir: <EDIT_ME>/asr_cache
+  index_path: <EDIT_ME>/inference_index.jsonl
+  transcripts_dir: <EDIT_ME>/asr_cache/transcripts
+  dataset_duration_dir: <EDIT_ME>/YODAS2-MCQA/2
+  # Alternatively set parquet for a single-file development split.
+  # parquet: <EDIT_ME>/development.parquet
+  full_results: <EDIT_ME>/reader/full/results.jsonl
+  rag_results: <EDIT_ME>/reader/rag/results.jsonl
+  # This path is opened only by the evaluate stage.
+  labels: <EDIT_ME>/isolated_scorer_labels.jsonl
+
+models:
+  text_llm: <EDIT_ME>/Qwen2.5-3B-Instruct
+  audio_llm: <EDIT_ME>/Qwen2-Audio-7B-Instruct
+  # Optional compatibility checkout used in the reported experiments.
+  # Omit this key when the installed Transformers version provides Qwen2-Audio.
+  vendor_root: <EDIT_ME>/qwen2_audio_compatibility_checkout
+
+method:
+  # Paper configuration: g_i = disagreement OR transcript density < tau.
+  trigger_policy: cross_view
+  sparse_words_per_second: 0.1
+  verification_clip_seconds: 20.0
+  verification_sar_cap: 0.20
+  selection_policy: query
+  verifier_choices_visible: false
+  require_attribution: true
+
+evaluation:
+  bootstrap_resamples: 10000
+  bootstrap_seed: 25
+
+runtime:
+  output_dir: <EDIT_ME>/outputs/sanctifier
+  local_files_only: true
+  dtype: float16
